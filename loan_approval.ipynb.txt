@@ -1,2 +1,114 @@
 cd ~/Documents/loan-approval-prediction
 jupyter notebook
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# Simulate a small loan dataset (since we can't fetch from Kaggle directly here)
+data = {
+    'Gender': ['Male', 'Female', 'Male', 'Male', 'Female', 'Male', 'Female', 'Male'],
+    'Married': ['No', 'Yes', 'Yes', 'No', 'No', 'Yes', 'No', 'Yes'],
+    'ApplicantIncome': [5000, 3000, 4000, 6000, 2500, 4500, 3500, 7000],
+    'LoanAmount': [200, 120, 150, 250, 100, 180, 130, 300],
+    'Credit_History': [1, 0, 1, 1, 0, 1, 0, 1],
+    'Loan_Status': ['Y', 'N', 'Y', 'Y', 'N', 'Y', 'N', 'Y']
+}
+
+df = pd.DataFrame(data)
+
+# Encode categorical variables
+le = LabelEncoder()
+for col in ['Gender', 'Married', 'Loan_Status']:
+    df[col] = le.fit_transform(df[col])
+
+# Features and target
+X = df.drop('Loan_Status', axis=1)
+y = df['Loan_Status']
+
+# Standardize features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.25, random_state=42)
+
+# Logistic Regression model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Metrics
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+class_report = classification_report(y_test, y_pred)
+
+accuracy, conf_matrix, class_report
+
+
+
+
+# Loan Approval Prediction using Logistic Regression
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# ---- Sample Dataset (Replace with Kaggle dataset in real project) ----
+data = {
+    'Gender': ['Male', 'Female', 'Male', 'Male', 'Female', 'Male', 'Female', 'Male'],
+    'Married': ['No', 'Yes', 'Yes', 'No', 'No', 'Yes', 'No', 'Yes'],
+    'ApplicantIncome': [5000, 3000, 4000, 6000, 2500, 4500, 3500, 7000],
+    'LoanAmount': [200, 120, 150, 250, 100, 180, 130, 300],
+    'Credit_History': [1, 0, 1, 1, 0, 1, 0, 1],
+    'Loan_Status': ['Y', 'N', 'Y', 'Y', 'N', 'Y', 'N', 'Y']
+}
+
+df = pd.DataFrame(data)
+
+# ---- Data Preprocessing ----
+le = LabelEncoder()
+for col in ['Gender', 'Married', 'Loan_Status']:
+    df[col] = le.fit_transform(df[col])
+
+X = df.drop('Loan_Status', axis=1)
+y = df['Loan_Status']
+
+# Standardization
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# ---- Train-Test Split ----
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.25, random_state=42)
+
+# ---- Model Training ----
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# ---- Predictions ----
+y_pred = model.predict(X_test)
+
+# ---- Evaluation ----
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("Classification Report:\n", classification_report(y_test, y_pred))
+
+# ---- Example Prediction ----
+sample_data = pd.DataFrame({
+    'Gender': [1],  # Male
+    'Married': [1], # Yes
+    'ApplicantIncome': [5500],
+    'LoanAmount': [150],
+    'Credit_History': [1]
+})
+
+sample_data_scaled = scaler.transform(sample_data)
+prediction = model.predict(sample_data_scaled)
+print("Loan Approval Prediction:", "Approved" if prediction[0] == 1 else "Not Approved")
