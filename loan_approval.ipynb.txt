@@ -1,0 +1,2 @@
+cd ~/Documents/loan-approval-prediction
+jupyter notebook
